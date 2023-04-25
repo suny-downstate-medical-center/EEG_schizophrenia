@@ -1,3 +1,9 @@
+'''
+Loads EEG epoch data, and breaks down into evoked object (background and target tones)
+Plots average Target and Background evoked for each file and the difference waveform
+Saves evoked data
+'''
+
 import numpy as np
 import mne
 import os

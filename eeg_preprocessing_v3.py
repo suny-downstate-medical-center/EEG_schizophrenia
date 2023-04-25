@@ -1,3 +1,7 @@
+'''
+Load raw EEG files, filters, EOG regression and epoching - bad epochs are rejected
+Output is filtered and regressed EEG epochs
+'''
 import numpy as np
 import mne
 from mne.preprocessing import EOGRegression
@@ -55,14 +59,10 @@ for file in os.listdir(base_dir):
                           scalings=dict(eeg=50e-6, eog=250e-6))
         # raw.plot(**raw_kwargs)
 # regress (using coefficients computed previously) and plot
-        raw_clean = model_sub.apply(raw)
+        raw_clean = model_sub.apply(filtered)
         # raw_clean.plot(**raw_kwargs)
-# raw.plot_psd(picks=['FCz'], fmax=100)
-        bkgd_epochs = epochs_clean_sub['Background']
-        # bkgd_epochs.plot_psd()
-        # bkgd_epochs.plot_image(picks=['Cz', 'C4', 'C3', 'Pz', 'P5', 'P6'])
-        #bkgd_epochs.plot_image(picks=['Cz'])
-        epochs_clean_sub.save(base_dir + 'processed/' + fname + 'cond_D-epo.fif', overwrite=True)
+        epochs_clean_sub.plot_psd(picks='eeg', fmax=90)
+        # epochs_clean_sub.save(base_dir + 'processed/' + fname + 'cond_D-epo.fif', overwrite=True)
 
 
 

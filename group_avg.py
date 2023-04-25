@@ -1,3 +1,6 @@
+# TODO - Evaluate value error
+
+
 import numpy as np
 import mne
 import glob
@@ -18,8 +21,7 @@ evokeds_diff = mne.combine_evoked([evokeds['Target'], evokeds['Background']],
                                           weights=[1, -1])
 # thc_epochs = {}
 # Define plot parameters
-roi = ['Cz'
-       ]
+roi = ['Cz']
 
 color_dict = {'Control':'blue', 'Violation':'red'}
 linestyle_dict = {'Control':'-', 'Violation':'--'}

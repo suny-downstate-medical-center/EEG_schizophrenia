@@ -1,3 +1,8 @@
+'''
+NDS Pipeline used in their mne tutorial
+ICA used for EOG regression
+Saved Epoch objet
+'''
 import numpy as np
 import mne
 from mne.preprocessing import EOGRegression
