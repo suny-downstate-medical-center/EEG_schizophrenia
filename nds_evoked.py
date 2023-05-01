@@ -21,8 +21,8 @@ for file in os.listdir(data_dir):
         evokeds = {c: epochs[c].average() for c in conditions}
 
         times = [.150, .250, .400, .600, .800]
-        #for c in evokeds.keys():
-        #    evokeds[c].plot_joint(times=times, title=c);
+        for c in evokeds.keys():
+            evokeds[c].plot_joint(times=times, title=c);
         mne.viz.plot_compare_evokeds(evokeds, picks="Fz", combine='mean');
 
         roi = ['Pz', 'P5', 'P6', 'Cz', 'C4', 'C3']
