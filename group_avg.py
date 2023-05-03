@@ -7,7 +7,7 @@ import glob
 import os
 conditions = ['Background', 'Target']
 
-base_dir = '/Users/scottmcelroy/smm_code/A1_scz/A1_raw_data/grp_D/'
+base_dir = (os.getcwd() + '/grp_A/')
 data_files = glob.glob(base_dir + '*.fif')
 
 evokeds = {}

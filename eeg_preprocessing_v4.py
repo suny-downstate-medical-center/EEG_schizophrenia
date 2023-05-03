@@ -7,7 +7,7 @@ import mne
 from mne.preprocessing import EOGRegression
 import os
 
-base_dir = '/Users/scottmcelroy/smm_code/A1_scz/A1_raw_data/cond_D/'
+base_dir = (os.getcwd() + '/grp_A')
 for file in os.listdir(base_dir):
     if file.endswith('.bdf'):
         raw = mne.io.read_raw_bdf(os.path.join(base_dir, file))
