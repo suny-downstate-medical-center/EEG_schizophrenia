@@ -9,10 +9,9 @@ import glob
 import os
 conditions = ['Background', 'Target']
 
-base_dir = '/Users/scottmcelroy/smm_code/A1_scz/A1_raw_data/cond_A/'
-data_files = glob.glob(base_dir + '*.bdf')
-
-raws = {}
-
-for idx, c in enumerate(conditions):
-    raws[c] = [mne.io.read_raw_bdf(d)[idx] for d in data_files]
+base_dir = '/Users/scottmcelroy/smm_code/A1_scz/A1_raw_data/cond_D/'
+for file in os.listdir(base_dir):
+    if file.endswith('.bdf'):
+        raw = mne.io.read_raw_bdf(os.path.join(base_dir, file))
+        fname = file[0:5]
+        raw.load_data()

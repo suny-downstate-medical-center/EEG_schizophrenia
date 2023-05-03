@@ -14,7 +14,6 @@ for file in os.listdir(base_dir):
         fname = file[0:5]
         raw.load_data()
 # maybe use
-
         raw.set_channel_types({'HEO1': 'eog', 'HEO2': 'eog', 'VEO1': 'eog', 'VEO2': 'eog', 'NOSE': 'misc', 'M1': 'misc',
                                'M2': 'misc', 'EXG8': 'misc'})
         raw.set_eeg_reference(['NOSE'])

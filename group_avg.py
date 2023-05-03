@@ -15,11 +15,13 @@ evokeds = {}
 for idx, c in enumerate(conditions):
     evokeds[c] = [mne.read_evokeds(d)[idx] for d in data_files]
 
-evokeds
-ave = mne.grand_average(evokeds['Background'], ['Target'])
-evokeds_diff = mne.combine_evoked([evokeds['Target'], evokeds['Background']],
-                                          weights=[1, -1])
+std = evokeds['Background']
+dev = evokeds['Target']
+ave = mne.grand_average(dev)
+#evokeds_diff = mne.combine_evoked([evokeds['Target'], evokeds['Background']],
+#                                          weights=[1, -1])
 # thc_epochs = {}
+'''
 # Define plot parameters
 roi = ['Cz']
 
@@ -48,7 +50,7 @@ mne.viz.plot_compare_evokeds(ave,
 #        thc_bkgd = np.append(thc_bkgd, x)
 
 
-
+'''
 
 
 
