@@ -2,6 +2,9 @@
 Loads EEG epoch data, and breaks down into evoked object (background and target tones)
 Plots average Target and Background evoked for each file and the difference waveform
 Saves evoked data
+
+#TODO nds_evoked.py creates .fif files with different sizes which breaks group_avg.py
+#
 '''
 
 import numpy as np
