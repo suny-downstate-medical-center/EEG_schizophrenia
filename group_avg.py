@@ -3,11 +3,12 @@
 
 import numpy as np
 import mne
+from mne.time_frequency import tfr_morlet
 import glob
 import os
 conditions = ['Background', 'Target']
 
-base_dir = (os.getcwd() + '/grp_A/')
+base_dir = '/Users/scottmcelroy/smm_code/A1_scz/A1_raw_data/organized_data/test/'
 data_files = glob.glob(base_dir + '*.fif')
 
 evokeds = {}
@@ -17,50 +18,19 @@ for idx, c in enumerate(conditions):
 
 std = evokeds['Background']
 dev = evokeds['Target']
-ave = mne.grand_average(dev)
-#evokeds_diff = mne.combine_evoked([evokeds['Target'], evokeds['Background']],
-#                                          weights=[1, -1])
-# thc_epochs = {}
+
+ave_std = mne.grand_average(std)
+ave_dev = mne.grand_average(dev)
+ave_std.plot_psd(fmax=100)
 '''
-# Define plot parameters
-roi = ['Cz']
+kwargs = dict(fmin=2, fmax=40, n_jobs=None)
+# freqs = np.logspace(*np.log10([6, 35]), num=8)
+# n_cycles = freqs / 2.  # different number of cycle per frequency
+# power_std, itc = tfr_morlet(ave_std, freqs=freqs, n_cycles=n_cycles, use_fft=True,
+                       # return_itc=False, decim=3, n_jobs=None)
 
-color_dict = {'Control':'blue', 'Violation':'red'}
-linestyle_dict = {'Control':'-', 'Violation':'--'}
-
-
-mne.viz.plot_compare_evokeds(ave,
-                             combine='mean',
-                             legend='lower right',
-                             picks=roi, show_sensors='upper right',
-                             colors=color_dict,
-                             linestyles=linestyle_dict,
-                             title='Violation vs. Control Waveforms'
-                            )
-
-
-
-#for idx, c in enumerate(conditions):
-#  thc_epochs[c] = [mne.read_epochs(d) for d in data_files]
-#thc_bkgd = []
-
-# Avg PSDs
-#for i in thc_epochs:
-#    for x in i.events:
-#        thc_bkgd = np.append(thc_bkgd, x)
-
-
-'''
-
-
-
-
-
-
-
-'''
-epochs = mne.read_epochs('/Users/scottmcelroy/Desktop/thc_iom/processed/TI008thc_iom-epo.fif')
-epoch_cov = mne.compute_covariance(epochs)
-mne.bem.make_bem_model(subject='TI008')
-mne.fit_dipole(epochs, epoch_cov)
+# power_dev, itc = tfr_morlet(epochs, freqs=freqs, n_cycles=n_cycles, use_fft=True,
+                       # return_itc=False, decim=3, n_jobs=None)
+ave_std.plot_psd(['Cz'], baseline=(-0.5, 0), mode='logratio', title= 'Standard')
+ave_dev.plot_psd(['Cz'], baseline=(-0.5, 0), mode='logratio', title= 'Deviant')
 '''
