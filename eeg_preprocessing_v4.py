@@ -9,7 +9,7 @@ import os
 
 plot_kwargs = dict(picks='all', ylim=dict(eeg=(-10, 10), eog=(-5, 15)))
 
-base_dir = '/Users/scottmcelroy/smm_code/A1_scz/A1_exp_data/organized_data/cond_D/'
+base_dir = '/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/20Hz/cond_A/'
 for file in os.listdir(base_dir):
     if file.endswith('.bdf'):
         raw = mne.io.read_raw_bdf(os.path.join(base_dir, file))
@@ -18,7 +18,7 @@ for file in os.listdir(base_dir):
 
 # Define misc channels not in montage
         raw.set_channel_types({'HEO1': 'eog', 'HEO2': 'eog', 'VEO1': 'eog', 'VEO2': 'eog',
-                               'NOSE': 'misc', 'M1': 'misc', 'M2': 'misc', 'EXG8': 'misc'})
+                               e'M1': 'misc', 'M2': 'misc', 'EXG8': 'misc'})
         raw.set_eeg_reference(['NOSE'])
 # Set EEG Montage for Electrode Locations
 
@@ -31,7 +31,7 @@ for file in os.listdir(base_dir):
         n_chan = len(ch_names)
 # Bandpass and notch filtering data
 
-        filt = raw.copy().filter(0.1, 100)
+        filt = raw.copy().filter(15, 25)
         filtered = filt.notch_filter(60)
         # raw.resample(1230)
 
@@ -41,12 +41,13 @@ for file in os.listdir(base_dir):
 
 # Find events and epoch data using rejection criteria
         events = mne.find_events(filtered)
-        event_id = {'Background': 4, 'Target': 200}
+        event_id = {'Background': 100, 'Target': 200}
         epochs = mne.Epochs(filtered, events, event_id=event_id, preload=True,
                             reject=reject_criteria, flat=flat_criteria)
-        epochs['Background'].plot_psd(method='auto', fmax=100)
-        epochs['Background'].average().plot_psd(method='auto', fmax=100)
+        epochs['Background'].plot_psd(fmax=100)
+        # epochs['Background'].average().plot_psd(method='auto', fmax=100)
         #epochs.average().plot_psd(method='auto',xscale='log', fmax=100)
+        # spectrum = epochs['Background'].compute_psd()
 
         # epochs['Background'].plot_psd(fmax=100)
 
