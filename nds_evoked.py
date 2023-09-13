@@ -35,9 +35,9 @@ for file in os.listdir(data_dir):
         roi = ['Pz', 'P5', 'P6', 'Cz', 'C4', 'C3']
         
         color_dict = {'Background': 'blue', 'Target': 'red'}
-        linestyle_dict = {'Background': '-', 'Target': '--'}
+        linestyle_dict = {'Standard': '-', 'Deviant': '--'}
 
-        evokeds_diff = mne.combine_evoked([evokeds['Target'], evokeds['Background']],
+        evokeds_diff = mne.combine_evoked([evokeds['Deviant'], evokeds['Standard']],
                                           weights=[1, -1])
         evokeds_diff
         # mne.viz.plot_compare_evokeds({'Mismatch-Match': evokeds_diff},

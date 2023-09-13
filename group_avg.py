@@ -1,11 +1,9 @@
 # TODO - Evaluate value error
 
 
-import numpy as np
 import mne
-from mne.time_frequency import tfr_morlet
 import glob
-import os
+
 conditions = ['Background', 'Target']
 
 base_dir = '/Users/scottmcelroy/smm_code/A1_scz/A1_raw_data/organized_data/test/'
