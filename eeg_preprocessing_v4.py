@@ -9,7 +9,7 @@ import os
 
 plot_kwargs = dict(picks='all', ylim=dict(eeg=(-10, 10), eog=(-5, 15)))
 
-base_dir = '/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/20Hz/cond_A/'
+base_dir = '/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/40Hz/cond_D/'
 for file in os.listdir(base_dir):
     if file.endswith('.bdf'):
         raw = mne.io.read_raw_bdf(os.path.join(base_dir, file))
@@ -18,9 +18,14 @@ for file in os.listdir(base_dir):
 
 # Define misc channels not in montage
         raw.set_channel_types({'HEO1': 'eog', 'HEO2': 'eog', 'VEO1': 'eog', 'VEO2': 'eog',
-                               e'M1': 'misc', 'M2': 'misc', 'EXG8': 'misc'})
-        raw.set_eeg_reference(['NOSE'])
-# Set EEG Montage for Electrode Locations
+                               'M1': 'misc', 'M2': 'misc', 'EXG8': 'misc'})
+        raw.set_eeg_reference(ref_channels='average')
+        raw.info['bads'].append('EXG8')
+        raw.info['bads'].append('M1')
+        raw.info['bads'].append('M2')
+        raw.info['bads'].append('NOSE')
+        raw.info['bads'].append('CP4')
+        # Set EEG Montage for Electrode Locations
 
         std_montage = mne.channels.make_standard_montage('biosemi64')
         raw = raw.set_montage(std_montage, on_missing='warn')
@@ -30,21 +35,21 @@ for file in os.listdir(base_dir):
         ch_names = raw.ch_names
         n_chan = len(ch_names)
 # Bandpass and notch filtering data
-
-        filt = raw.copy().filter(15, 25)
+        raw.resample(1024)
+        filt = raw.copy().filter(0.1, 100)
         filtered = filt.notch_filter(60)
-        # raw.resample(1230)
+
 
 # establish flat and reject criteria for bad channels
-        reject_criteria = dict(eeg=100e-6, eog=200e-6)
+        reject_criteria = dict(eeg=100e-6)
         flat_criteria = dict(eeg=1e-6)
 
 # Find events and epoch data using rejection criteria
         events = mne.find_events(filtered)
-        event_id = {'Background': 100, 'Target': 200}
+        event_id = {'Background': 4, 'Target': 200}
         epochs = mne.Epochs(filtered, events, event_id=event_id, preload=True,
-                            reject=reject_criteria, flat=flat_criteria)
-        epochs['Background'].plot_psd(fmax=100)
+                            )
+
         # epochs['Background'].average().plot_psd(method='auto', fmax=100)
         #epochs.average().plot_psd(method='auto',xscale='log', fmax=100)
         # spectrum = epochs['Background'].compute_psd()
@@ -89,10 +94,11 @@ for file in os.listdir(base_dir):
 
 # show the effect on the blink evoked
         eog_evoked_clean = model_evoked.apply(eog_evoked)
-        eog_evoked_clean.apply_baseline()
+        eog_evoked_clean = eog_evoked_clean.apply_baseline()
         # eog_evoked_clean.plot('all')
         # epochs_clean_evoked.plot_psd(picks='eeg', fmax=90)
-        # epochs.save(base_dir + 'processed/' + fname + 'cond_D-epo.fif', overwrite=True)
+        epochs_clean_sub = epochs_clean_sub.filter(0, 12)
+        epochs_clean_sub.save(base_dir + 'processed/' + fname + 'cond_D-epo.fif', overwrite=True)
 
 '''
 V2: Change from Original is that I will be using Gratton's method from the paper for 

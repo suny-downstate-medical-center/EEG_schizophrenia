@@ -1,5 +1,5 @@
 import EEG_tools as et
-
+import mne
 # Load files from EEGlab analysis
 # epochs = et.load_file.eLab_epochs(path='/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/cond_D/TI008D440A.set')
 
@@ -19,6 +19,14 @@ import EEG_tools as et
 
 # et.evoked.plot_difference(evokeds)
 
-evoked_dict = et.group_analysis.MMN_epochs('/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/cond_D/')
+ave_std, ave_dev = et.group_analysis.MMN_epochs('/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/cond_D/')
+evokeds_diff = mne.combine_evoked([ave_dev, ave_std],
+                                   weights=[1, -1])
+
+mne.viz.plot_compare_evokeds({'Mismatch-Match': evokeds_diff},
+                              show_sensors='upper right',
+                             combine='mean',
+                             title='Difference Wave',
+                             );
 
 # evokeds = et.group_analysis.MMN_epochs('/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/cond_D/')

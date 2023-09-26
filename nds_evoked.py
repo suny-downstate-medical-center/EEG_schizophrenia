@@ -11,25 +11,25 @@ import mne
 import os
 mne.set_log_level('error')
 
-base_dir = base_dir = '/Users/scottmcelroy/smm_code/A1_scz/A1_exp_data/organized_data/cond_D/'
+base_dir = base_dir = '/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/40Hz/cond_A/'
 data = 'processed/'
 data_dir = base_dir + data
 evokeds = {}
 for file in os.listdir(data_dir):
     if file.endswith('.fif'):
         epochs = mne.read_epochs(os.path.join(data_dir, file))
+        epochs = epochs.filter(1, 12)
         fname = file[0:5]
         conditions = ['Background', 'Target']
 
         evokeds = {c: epochs[c].average() for c in conditions}
 
-        evokeds['Background'].plot_psd(fmax=100)
 
 
         # for c in evokeds.keys():
         #     evokeds[c].plot_joint();
-        '''
-        mne.viz.plot_compare_evokeds(evokeds, picks="Fz", combine='mean');
+
+        mne.viz.plot_compare_evokeds(evokeds, picks="Cz", combine='mean');
         
     
         roi = ['Pz', 'P5', 'P6', 'Cz', 'C4', 'C3']
@@ -37,7 +37,7 @@ for file in os.listdir(data_dir):
         color_dict = {'Background': 'blue', 'Target': 'red'}
         linestyle_dict = {'Standard': '-', 'Deviant': '--'}
 
-        evokeds_diff = mne.combine_evoked([evokeds['Deviant'], evokeds['Standard']],
+        evokeds_diff = mne.combine_evoked([evokeds['Target'], evokeds['Background']],
                                           weights=[1, -1])
         evokeds_diff
         # mne.viz.plot_compare_evokeds({'Mismatch-Match': evokeds_diff},
@@ -50,7 +50,5 @@ for file in os.listdir(data_dir):
             evokeds[condition].comment = condition
 
 
-        # mne.write_evokeds('/Users/scottmcelroy/smm_code/A1_scz/A1_raw_data/organized_data/test/' + fname + 'cond_D-ave.fif',
-        #                    list(evokeds.values()))
-        
-        '''
+        mne.write_evokeds('/Users/scottmcelroy/A1_scz/A1_exp_data/organized_data/mne_evoked/cond_A/' + fname + 'cond_A-ave.fif',
+                           list(evokeds.values()))
